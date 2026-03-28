@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 import whisper
-from moviepy.editor import VideoFileClip
+
 import os
 from googletrans import Translator
 
@@ -11,10 +11,6 @@ translator = Translator()
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-def video_to_audio(video_path, audio_path):
-    clip = VideoFileClip(video_path)
-    clip.audio.write_audiofile(audio_path)
-    clip.close()
 
 def format_time(seconds):
     ms = int((seconds - int(seconds)) * 1000)
@@ -41,7 +37,7 @@ async def transcribe_srt(file: UploadFile = File(...)):
     with open(video_path, "wb") as f:
         f.write(await file.read())
 
-    video_to_audio(video_path, audio_path)
+    
 
     result = model.transcribe(audio_path)
 
